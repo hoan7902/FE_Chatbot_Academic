@@ -22,6 +22,14 @@ const BoxTxtChat = styled.div`
 const Typewriter = ({ text, delay = 50 }) => {
   const [currentText, setCurrentText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log('check text: ', text)
+  console.log('check currentIndex: ', currentIndex)
+
+  useEffect(() => {
+    setCurrentIndex(0);
+    setCurrentText('')
+  }, [text])
+
   useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
@@ -29,7 +37,9 @@ const Typewriter = ({ text, delay = 50 }) => {
         setCurrentIndex(prevIndex => prevIndex + 1);
       }, delay);
 
-      return () => clearTimeout(timeout);
+      return () => {
+        clearTimeout(timeout)
+      };
     }
     return null
   }, [currentIndex, delay, text]);

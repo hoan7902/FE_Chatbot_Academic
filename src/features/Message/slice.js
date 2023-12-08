@@ -9,13 +9,15 @@ export const messageSlice = createSlice({
     listUserMessage: [],
     listChatBoxMessage: [],
     listMessagePair: [],
+    listTopicChat: [],
+    contextTopicKey: '',
   },
   reducers: {
     getListUserMessenger: (state, action) => {
       state.listUserMessage = [action.payload.message, ...state.listUserMessage]
     },
     getListResponseMessenger: (state, action) => {
-      state.listUserMessage = [action.payload.message, ...state.listChatBoxMessage]
+      state.listChatBoxMessage = [action.payload.message, ...state.listChatBoxMessage]
     },
     getCurrentUserMessage: (state, action) => {
       state.currentUserMessage = action.payload.message
@@ -40,10 +42,25 @@ export const messageSlice = createSlice({
         question: state.currentUserMessage,
         response: state.currentResponseMessage,
       }
-      console.log('check newMessage: ', newMessage)
       if (newMessage.question) {
         state.listMessagePair = [...state.listMessagePair, newMessage]
       }
+    },
+    getListTopicChat: (state, action) => {
+      state.listTopicChat = action.payload.listTopicChat
+    },
+    getContextTopicKey: (state, action) => {
+      state.contextTopicKey = action.payload.contextTopicKey
+    },
+    resetAllStates: (state) => {
+      state.messagepair = {};
+      state.currentUserMessage = '';
+      state.currentResponseMessage = '';
+      state.listUserMessage = [];
+      state.listChatBoxMessage = [];
+      state.listMessagePair = [];
+      // state.listTopicChat = []; // Cái này k cần reset
+      state.contextTopicKey = '';
     },
   },
 })
@@ -56,6 +73,9 @@ export const {
   getMessagePair,
   getListResponseMessenger,
   getListMessagePair,
+  getListTopicChat,
+  getContextTopicKey,
+  resetAllStates,
 } = messageSlice.actions
 
 export default messageSlice.reducer

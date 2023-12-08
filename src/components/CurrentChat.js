@@ -1,5 +1,5 @@
 import { FormControl } from '@chakra-ui/form-control';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Input } from '@chakra-ui/input';
 import './styles.css';
 import { useState } from 'react';
@@ -20,8 +20,9 @@ const BoxCustom = styled.div`
   overflow-y: visible;
   margin-bottom: 0;
   position: fixed;
+  width: 800px;
+  right: calc((100% - 320px - 800px) / 2);
   bottom: 27px;
-  width: 68%;
   background-color: ${globalColor.darkGrayBlue};
   padding: 10px;
   padding-top: 0px;
@@ -32,6 +33,7 @@ const BoxCustom = styled.div`
 
 const CurrentChat = () => {
   const [newMessage, setNewMessage] = useState('');
+  const questionType = useSelector(state => state.messageReducer.contextTopicKey)
   const dispatch = useDispatch();
   const sendMessage = async () => {
     dispatch(getListMessagePair())
@@ -39,7 +41,7 @@ const CurrentChat = () => {
     dispatch(deleteCurrentUserMessage());
     dispatch(getListUserMessenger({ message: newMessage }));
     dispatch(getCurrentUserMessage({ message: newMessage }));
-    dispatch(getListChat({ useMessage: newMessage }));
+    dispatch(getListChat({ useMessage: newMessage, questionType }));
   };
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
