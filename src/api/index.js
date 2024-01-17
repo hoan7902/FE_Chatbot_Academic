@@ -40,7 +40,7 @@ export const callBkuApi = async ({ message, questionType = 1 }) => {
       },
       // timeout: 3000, // Timeout set to 3 seconds (3000 milliseconds)
     });
-    if (response?.data?.data?.point < 0) {
+    if (response?.data?.data?.point < -5) {
       return 'Xin lỗi, tôi không thể hỗ trợ bạn trả lời câu hỏi này.'
     }
     return response?.data?.data?.answer;
