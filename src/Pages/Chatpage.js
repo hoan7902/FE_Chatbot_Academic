@@ -1,10 +1,24 @@
+/* eslint-disable no-unused-vars */
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useCallback, useState } from 'react';
+import {
+  Drawer, DrawerBody,
+} from '@chakra-ui/react'
 import Chatbox from '../components/Chatbox';
 import MyChats from '../components/MyChats';
-import { getListTopicChat } from '../features/Message/slice';
-import { getListQuestionTypes } from '../api';
+import useFetchListTopicChat from '../hooks/useFetchListTopicChat';
+import { createNewChat } from '../api';
+import useFetchListMessagePair from '../hooks/useFetchListMessagePair';
+import useIsMobile from '../hooks/useIsMobile';
+import { globalColor } from '../theme';
+
+const DrawerStyled = styled(Drawer)`
+  z-index: 2;
+`
+
+const DrawerBodyStyled = styled(DrawerBody)`
+  z-index: 2;
+`
 
 const Container = styled.div`
   width: 100%;
@@ -16,30 +30,60 @@ const Container = styled.div`
 const Wrap = styled.div`
   display: flex;
   min-height: 100vh;
+  background-color: ${globalColor.slateBlack};
 `
 
 const Chatpage = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    const fetchListTopicChat = async () => {
-      try {
-        const listTopicChat = await getListQuestionTypes()
-        dispatch(getListTopicChat({ listTopicChat }))
-      } catch (error) {
-        // Handle errors if any
-        console.error('Error fetching listTopicChat: ', error);
-      }
-    }
+  const { fetchListTopicChat, listTopicChat } = useFetchListTopicChat();
+  const { handleSetIdAndFetchData } = useFetchListMessagePair();
+  const [isOpenMyChats, setIsOpenMyChats] = useState(false);
 
+  const onOpenMyChats = useCallback(() => {
+    setIsOpenMyChats(true)
+  }, []);
+
+  const onCloseMyChats = useCallback(() => {
+    setIsOpenMyChats(false)
+  }, [])
+
+  const isMobile = useIsMobile()
+
+  useEffect(() => {
     fetchListTopicChat();
   }, []);
+
+  const handleCreateNewChat = useCallback(async () => {
+    const nameChat = 'New Chat';
+    await createNewChat(nameChat);
+    fetchListTopicChat();
+    handleSetIdAndFetchData();
+  }, [fetchListTopicChat, handleSetIdAndFetchData]);
+
+  useEffect(() => {
+    if (listTopicChat && listTopicChat.length === 0) {
+      handleCreateNewChat();
+    }
+  }, [listTopicChat]);
+
+
+  if (isMobile) {
+    return (
+      <Container>
+        <Wrap>
+          <Chatbox onOpenMyChats={onOpenMyChats} />
+          <MyChats onCloseMyChats={onCloseMyChats} isOpenMyChats={isOpenMyChats} />
+        </Wrap>
+      </Container>
+    )
+  }
 
   return (
     <Container>
       <Wrap>
         <MyChats />
-        <Chatbox />
+        <Chatbox onOpenMyChats={onOpenMyChats} />
       </Wrap>
+
     </Container>
   );
 };

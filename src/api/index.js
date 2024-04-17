@@ -29,43 +29,178 @@ export const callOpenAI = async ({ message }) => {
   }
 };
 
-export const callBkuApi = async ({ message, questionType = 1 }) => {
+export const sendMessageToBkuChat = async ({ message, conversationId }) => {
   try {
-    const response = await axios.post(`${BASE_URL.BASE_BKU}/api/ask`, {
-      question: message,
-      question_type: questionType,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
+    const token = localStorage.getItem('token');
+    const response = await axios.post(
+      `${BASE_URL.BASE_BKU}/api/message/send`,
+      {
+        message,
+        conversation_id: conversationId,
       },
-      // timeout: 3000, // Timeout set to 3 seconds (3000 milliseconds)
-    });
-    if (response?.data?.data?.point < -5) {
-      return 'Xin lỗi, tôi không thể hỗ trợ bạn trả lời câu hỏi này.'
-    }
-    return response?.data?.data?.answer;
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data.answer;
   } catch (error) {
     // Handle any errors here
-    console.error(error);
-    return 'Đã có lỗi xảy ra!!!';
+    console.error('error in sendMessageToBkuChat: ', error);
+    return null;
   }
 };
 
-export const getListQuestionTypes = async () => {
-  const response = await axios.get(`${BASE_URL.BASE_BKU}/api/question-types`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const questionTypes = response?.data?.data?.question_types || [];
+export const editNameChat = async ({ name, conversationId }) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(
+      `${BASE_URL.BASE_BKU}/api/conversation/change-name`,
+      {
+        name,
+        conversation_id: conversationId,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error('error in editNameChat: ', error);
+    return null;
+  }
+};
 
-  const uniqueQuestionTypes = questionTypes.reduce((acc, curr) => {
-    const found = acc.some(item => item.context_key === curr.context_key);
-    if (!found) {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
+export const deleteChat = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(
+      `${BASE_URL.BASE_BKU}/api/conversation/${id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error('error in deleteChat: ', error);
+    return null;
+  }
+};
 
-  return uniqueQuestionTypes;
-}
+export const createNewChat = async (nameChat) => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.post(
+      `${BASE_URL.BASE_BKU}/api/conversation/create`,
+      {
+        name: nameChat,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error('error in createNewChat: ', error);
+    return null;
+  }
+};
+
+export const getMyChats = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(
+      `${BASE_URL.BASE_BKU}/api/conversation/get-mine`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error('error in getMyChats: ', error);
+    return null;
+  }
+};
+
+export const getHistoryChats = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(
+      `${BASE_URL.BASE_BKU}/api/conversation/history?conversation_id=${id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error('error in getHistoryChats: ', error);
+    return null;
+  }
+};
+
+export const login = async ({ email, password }) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL.BASE_BKU}/api/user/login`,
+      {
+        email,
+        password,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const signIn = async ({ name, email, password }) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL.BASE_BKU}/api/user/register`,
+      {
+        name,
+        email,
+        password,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    // Handle any errors here
+    console.error(error);
+    return null;
+  }
+};

@@ -5,12 +5,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import App from './App';
 import store from './store';
+import { NewProvider } from './context'
 
 ReactDOM.render(
   <Provider store={store}>
     <ChakraProvider>
       <BrowserRouter>
-        <App />
+        <NewProvider>
+          <App />
+        </NewProvider>
       </BrowserRouter>
     </ChakraProvider>
   </Provider>,

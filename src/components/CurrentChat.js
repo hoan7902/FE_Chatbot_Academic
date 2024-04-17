@@ -20,8 +20,6 @@ const BoxCustom = styled.div`
   overflow-y: visible;
   margin-bottom: 0;
   position: fixed;
-  width: 800px;
-  right: calc((100% - 320px - 800px) / 2);
   bottom: 27px;
   background-color: ${globalColor.darkGrayBlue};
   padding: 10px;
@@ -29,20 +27,33 @@ const BoxCustom = styled.div`
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border: 0 solid #d9d9e3;
+
+  @media (min-width: 768px) {
+    width: 800px;
+    right: calc((100% - 320px - 800px) / 2);
+  }
+
+  @media (max-width: 767px) {
+    width: 350px;
+    right: calc((100% - 350px) / 2);
+  }
 `;
 
 const CurrentChat = () => {
   const [newMessage, setNewMessage] = useState('');
-  const questionType = useSelector(state => state.messageReducer.contextTopicKey)
+  const conversationId = useSelector(state => state.messageReducer.conversationId)
   const dispatch = useDispatch();
+
   const sendMessage = async () => {
-    dispatch(getListMessagePair())
+    dispatch(getListMessagePair());
     dispatch(deleteCurrentReponseMessage());
     dispatch(deleteCurrentUserMessage());
     dispatch(getListUserMessenger({ message: newMessage }));
     dispatch(getCurrentUserMessage({ message: newMessage }));
-    dispatch(getListChat({ useMessage: newMessage, questionType }));
+    dispatch(getListChat({ useMessage: newMessage, conversationId }));
+    setNewMessage('');
   };
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
   };

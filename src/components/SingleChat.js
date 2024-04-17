@@ -6,12 +6,16 @@ import IconComponent from '../base/IconComponent';
 import { nameImage } from '../utils/nameImage';
 
 const BoxTxtUser = styled.div`
+  @media (min-width: 768px) {
+    padding: 50px 200px;
+    padding-left: 120px;
+  }
   color: ${globalColor.white};
   background-color: ${globalColor.slateBlack};
-  padding: 50px 200px;
-  padding-left: 120px;
   width: 100%;
   display: flex;
+  min-height: 70px;
+  align-items: center;
   .icon {
     margin-right: 20px;
     height: 58px;
@@ -20,13 +24,17 @@ const BoxTxtUser = styled.div`
 `;
 
 const BoxTxtChat = styled.div`
+  @media (min-width: 768px) {
+    padding: 50px 200px;
+    padding-left: ${props => (props.isSpinner ? '200px' : '120px')};
+  }
   color: ${globalColor.white};
   background-color: ${globalColor.darkGrayBlue};
-  padding: 50px 200px;
-  padding-left: ${props => (props.isSpinner ? '200px' : '120px')};
   width: 100%;
   will-change: transform, box-shadow, z-index;
   display: flex;
+  min-height: 70px;
+  align-items: center;
   .icon {
     margin-right: 20px;
     height: 40px;

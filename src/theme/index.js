@@ -5,4 +5,5 @@ export const globalColor = {
   deepMidnightBlack: '#2a2b32',
   darkCharcoalBlack: '#202123',
   slateBlack: '#343541',
+  borderLight: '#9b9b9b',
 }

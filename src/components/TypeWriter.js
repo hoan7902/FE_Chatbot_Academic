@@ -6,13 +6,17 @@ import IconComponent from '../base/IconComponent';
 import { nameImage } from '../utils/nameImage';
 
 const BoxTxtChat = styled.div`
+  @media (min-width: 768px) {
+    padding: 50px 200px;
+    padding-left: ${props => (props.isSpinner ? '200px' : '120px')};
+  }
   color: ${globalColor.white};
   background-color: ${globalColor.darkGrayBlue};
-  padding: 50px 200px;
-  padding-left: ${props => (props.isSpinner ? '200px' : '120px')};
   width: 100%;
   will-change: transform, box-shadow, z-index;
   display: flex;
+  align-items: center;
+  min-height: 70px;
   .icon {
     margin-right: 20px;
     height: 40px;
@@ -22,8 +26,6 @@ const BoxTxtChat = styled.div`
 const Typewriter = ({ text, delay = 50 }) => {
   const [currentText, setCurrentText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log('check text: ', text)
-  console.log('check currentIndex: ', currentIndex)
 
   useEffect(() => {
     setCurrentIndex(0);
