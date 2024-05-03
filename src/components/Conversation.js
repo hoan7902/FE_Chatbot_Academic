@@ -104,7 +104,7 @@ const Conversation = ({ isMobile }) => {
   return (
     <WrapConversation hasPaddingBottom={isMobile}>
       {listMessagePair.map(messagePair => <SingleChat textUser={messagePair.question} textResponse={`${messagePair.response}`} isOldChat />)}
-      {currentResponseMessage && <SingleChat textUser={currentUserMessage} textResponse={currentResponseMessage} />}
+      {currentUserMessage !== '' ? <SingleChat textUser={currentUserMessage} textResponse={currentResponseMessage} /> : null}
       <div ref={messagesEndRef} />
     </WrapConversation>
   )
