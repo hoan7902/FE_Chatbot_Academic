@@ -51,7 +51,7 @@ const Typewriter = ({ text, delay = 50 }) => {
   return (
     <BoxTxtChat>
       <IconComponent className="icon" fileName={nameImage.logoBku} alt="logoBKU" />
-      {currentText}
+      <div style={{ whiteSpace: 'pre-line' }}>{currentText}</div>
     </BoxTxtChat>
   );
 };

@@ -57,7 +57,7 @@ const SingleChat = ({ textUser, textResponse, isOldChat }) => (
     {isOldChat ? (
       <BoxTxtChat>
         <IconComponent className="icon" fileName={nameImage.logoBku} alt="logoBKU" />
-        {textResponse}
+        <div style={{ whiteSpace: 'pre-line' }}>{textResponse}</div>
       </BoxTxtChat>
     ) : <Typewriter text={textResponse} delay={20} />}
   </WrapSingleChat>
